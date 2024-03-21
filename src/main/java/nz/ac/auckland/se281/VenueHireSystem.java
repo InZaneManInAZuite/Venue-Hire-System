@@ -153,16 +153,35 @@ public class VenueHireSystem {
   public void makeBooking(String[] options) {
     // TODO implement this method
 
+    // Obtain venue
+    String venueCode = "";
+    int index = -1;
+    while (venueIndex < numOfVenues) {
+      if (options[0].compareTo(venueCodes.get(venueIndex)) == 0) {
+        venueCode = options[0];
+        index = venueIndex;
+        break;
+      }
+      venueIndex++;
+    }
+    venueIndex = 0;
+
     // Checks if making a booking is possible
     if (systemDate.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
+      return;
     }
     if (numOfVenues == 0) {
       MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
+      return;
+    }
+    if (venueCode.isEmpty()) {
+      MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage();
     }
 
-    
-
+    // Confirm booking to user
+    String bookRef = BookingReferenceGenerator.generateBookingReference();
+    MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookRef, venueNames.get(index), options[1], options[3]);
   }
 
   public void printBookings(String venueCode) {
