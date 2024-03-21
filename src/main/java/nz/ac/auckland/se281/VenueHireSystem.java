@@ -152,6 +152,17 @@ public class VenueHireSystem {
 
   public void makeBooking(String[] options) {
     // TODO implement this method
+
+    // Checks if making a booking is possible
+    if (systemDate.isEmpty()) {
+      MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
+    }
+    if (numOfVenues == 0) {
+      MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
+    }
+
+    
+
   }
 
   public void printBookings(String venueCode) {
