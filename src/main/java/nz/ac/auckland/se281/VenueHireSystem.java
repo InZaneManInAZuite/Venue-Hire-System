@@ -21,6 +21,12 @@ public class VenueHireSystem {
   public void createVenue(
       String venueName, String venueCode, String capacityInput, String hireFeeInput) {
     // TODO implement this method
+
+    if (venueName.trim().isEmpty()) {
+      MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
+      return;
+    }
+
     venueNames.add(venueName);
     venueCodes.add(venueCode);
     capacities.add(capacityInput);
