@@ -21,6 +21,11 @@ public class VenueHireSystem {
   public void createVenue(
       String venueName, String venueCode, String capacityInput, String hireFeeInput) {
     // TODO implement this method
+    venueNames.add(venueName);
+    venueCodes.add(venueCode);
+    capacities.add(capacityInput);
+    hireFees.add(hireFeeInput);
+    MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
 
   public void setSystemDate(String dateInput) {
