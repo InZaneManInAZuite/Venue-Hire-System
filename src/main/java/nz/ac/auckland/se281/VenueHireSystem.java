@@ -12,7 +12,7 @@ public class VenueHireSystem {
   ArrayList<String> hireFees = new ArrayList<String>();
   private int numOfVenues = 0;
   private int venueIndex = 0;
-  private String systemDate;
+  private String systemDate = "";
 
   public VenueHireSystem() {}
 
@@ -141,6 +141,13 @@ public class VenueHireSystem {
 
   public void printSystemDate() {
     // TODO implement this method
+
+    if (systemDate.isEmpty()) {
+      MessageCli.CURRENT_DATE.printMessage("not set");
+      return;
+    }
+
+    MessageCli.CURRENT_DATE.printMessage(systemDate);
   }
 
   public void makeBooking(String[] options) {
