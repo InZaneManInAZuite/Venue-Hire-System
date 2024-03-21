@@ -86,6 +86,13 @@ public class VenueHireSystem {
     }
 
     // Tests if capacity inputted is valid
+    try {
+      int tempCapacity = Integer.parseInt(capacityInput);
+      hireFee = tempCapacity;
+    } catch (Exception e) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", "");
+      return;
+    }
     if (capacity < 1) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
       return;
@@ -95,8 +102,12 @@ public class VenueHireSystem {
     try {
       int tempHireFee = Integer.parseInt(hireFeeInput);
       hireFee = tempHireFee;
-    } catch (NumberFormatException e) {
+    } catch (Exception e) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
+      return;
+    }
+    if (hireFee < 1) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", " positive");
       return;
     }
 
