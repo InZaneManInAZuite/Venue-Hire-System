@@ -20,10 +20,20 @@ public class VenueHireSystem {
 
   public void createVenue(
       String venueName, String venueCode, String capacityInput, String hireFeeInput) {
-    // TODO implement this method
+    // TODO implement this 
+    
+    int capacity = Integer.parseInt(capacityInput);
+    int hireFee = Integer.parseInt(hireFeeInput);
 
+    // Tests if there is a venue name
     if (venueName.trim().isEmpty()) {
       MessageCli.VENUE_NOT_CREATED_EMPTY_NAME.printMessage();
+      return;
+    }
+
+    // Tests if capacity inputted is valid
+    if (capacity < 1) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
       return;
     }
 
