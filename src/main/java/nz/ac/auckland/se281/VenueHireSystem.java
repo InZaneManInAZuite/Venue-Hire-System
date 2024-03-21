@@ -2,8 +2,14 @@ package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Types.CateringType;
 import nz.ac.auckland.se281.Types.FloralType;
+import java.util.ArrayList;
 
 public class VenueHireSystem {
+
+  ArrayList<String> venueNames = new ArrayList<String>();
+  ArrayList<String> venueCodes = new ArrayList<String>();
+  ArrayList<String> capacities = new ArrayList<String>();
+  ArrayList<String> hireFees = new ArrayList<String>();
 
   public VenueHireSystem() {}
 
