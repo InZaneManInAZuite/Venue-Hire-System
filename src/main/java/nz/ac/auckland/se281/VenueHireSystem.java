@@ -8,14 +8,18 @@ public class VenueHireSystem {
 
   ArrayList<String> venueNames = new ArrayList<String>();
   ArrayList<String> venueCodes = new ArrayList<String>();
-  ArrayList<String> capacities = new ArrayList<String>();
-  ArrayList<String> hireFees = new ArrayList<String>();
+  ArrayList<Integer> capacities = new ArrayList<Integer>();
+  ArrayList<Integer> hireFees = new ArrayList<Integer>();
 
   public VenueHireSystem() {}
 
   public void printVenues() {
     // TODO implement this method
-    System.out.println("There are no venues in the system. Please create a venue first.");
+
+    // Checks if there are venues
+    if (hireFees.size() == 0) {
+      MessageCli.NO_VENUES.printMessage();
+    }
   }
 
   public void createVenue(
@@ -48,8 +52,8 @@ public class VenueHireSystem {
 
     venueNames.add(venueName);
     venueCodes.add(venueCode);
-    capacities.add(capacityInput);
-    hireFees.add(hireFeeInput);
+    capacities.add(capacity);
+    hireFees.add(hireFee);
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
 
