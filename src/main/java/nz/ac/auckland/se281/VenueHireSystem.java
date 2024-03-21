@@ -10,14 +10,13 @@ public class VenueHireSystem {
   ArrayList<String> venueCodes = new ArrayList<String>();
   ArrayList<String> capacities = new ArrayList<String>();
   ArrayList<String> hireFees = new ArrayList<String>();
+  private int numOfVenues = 0;
+  private int venueIndex = 0;
 
   public VenueHireSystem() {}
 
   public void printVenues() {
     // TODO implement this method
-
-    int numOfVenues = hireFees.size();
-    int venueIndex = 0;
 
     // Checks if there are venues
     if (numOfVenues == 0) {
@@ -101,11 +100,23 @@ public class VenueHireSystem {
       return;
     }
 
+    // Checks if venue code is duplicated
+    while (venueIndex < numOfVenues) {
+      if (venueCode.compareTo(venueCodes.get(venueIndex)) == 0) {
+        MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venueNames.get(venueIndex));
+        venueIndex = 0;
+        return;
+      }
+      venueIndex++;
+    }
+    venueIndex = 0;
+
     // Add venues into the system
     venueNames.add(venueName);
     venueCodes.add(venueCode);
     capacities.add(capacityInput);
     hireFees.add(hireFeeInput);
+    numOfVenues++;
     MessageCli.VENUE_SUCCESSFULLY_CREATED.printMessage(venueName, venueCode);
   }
 
