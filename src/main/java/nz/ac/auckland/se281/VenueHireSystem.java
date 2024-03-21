@@ -24,88 +24,50 @@ public class VenueHireSystem {
       MessageCli.NO_VENUES.printMessage();
     }
 
-    // Print 
+    // Print text if number of venues is less than 10
     if (numOfVenues < 10) {
       switch (numOfVenues) {
         case 1:
           MessageCli.NUMBER_VENUES.printMessage("is", "one", "");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 2:
           MessageCli.NUMBER_VENUES.printMessage("are", "two", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 3:
           MessageCli.NUMBER_VENUES.printMessage("are", "three", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 4:
           MessageCli.NUMBER_VENUES.printMessage("are", "four", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 5:
           MessageCli.NUMBER_VENUES.printMessage("are", "five", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 6:
           MessageCli.NUMBER_VENUES.printMessage("are", "six", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 7:
           MessageCli.NUMBER_VENUES.printMessage("are", "seven", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 8:
           MessageCli.NUMBER_VENUES.printMessage("are", "eight", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         case 9:
           MessageCli.NUMBER_VENUES.printMessage("are", "nine", "s");
-          while (venueIndex < numOfVenues) {
-            MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-            venueIndex++;
-          }
-          venueIndex = 0;
           break;
         default:
           break;
       }
+
+      // Print all the venues and their details
+      while (venueIndex < numOfVenues) {
+        MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
+        venueIndex++;
+      }
+      venueIndex = 0;
+      return;
     }
 
     // If number of venues 10 or greater
-
   }
 
   public void createVenue(
@@ -136,6 +98,7 @@ public class VenueHireSystem {
       return;
     }
 
+    // Add venues into the system
     venueNames.add(venueName);
     venueCodes.add(venueCode);
     capacities.add(capacityInput);
