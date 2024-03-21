@@ -23,7 +23,7 @@ public class VenueHireSystem {
     // TODO implement this 
     
     int capacity = Integer.parseInt(capacityInput);
-    int hireFee = Integer.parseInt(hireFeeInput);
+    int hireFee;
 
     // Tests if there is a venue name
     if (venueName.trim().isEmpty()) {
@@ -34,6 +34,15 @@ public class VenueHireSystem {
     // Tests if capacity inputted is valid
     if (capacity < 1) {
       MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("capacity", " positive");
+      return;
+    }
+
+    // Tests if hire fee inputted is valid
+    try {
+      int tempHireFee = Integer.parseInt(hireFeeInput);
+      hireFee = tempHireFee;
+    } catch (NumberFormatException e) {
+      MessageCli.VENUE_NOT_CREATED_INVALID_NUMBER.printMessage("hire fee", "");
       return;
     }
 
