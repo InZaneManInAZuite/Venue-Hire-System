@@ -57,17 +57,20 @@ public class VenueHireSystem {
         default:
           break;
       }
-
-      // Print all the venues and their details
-      while (venueIndex < numOfVenues) {
-        MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-        venueIndex++;
-      }
-      venueIndex = 0;
-      return;
     }
 
-    // If number of venues 10 or greater
+    // If number of venues is 10 or greater
+    if (numOfVenues >= 10) {
+      MessageCli.NUMBER_VENUES.printMessage("are", Integer.toString(numOfVenues),"s");
+    }
+
+    // Print all the venues and their details
+    while (venueIndex < numOfVenues) {
+      MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
+      venueIndex++;
+    }
+    venueIndex = 0;
+    return;
   }
 
   public void createVenue(
