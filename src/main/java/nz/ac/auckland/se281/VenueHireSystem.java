@@ -168,15 +168,18 @@ public class VenueHireSystem {
     // Obtain booking's venue details
     String venueCode = "";
     String venueName = "";
+    int venueCapacity = 0;
     while (venueIndex < numOfVenues) {
       if (options[0].compareTo(venueCodes.get(venueIndex)) == 0) {
         venueCode = options[0];
         venueName = venueNames.get(venueIndex);
+        venueCapacity = Integer.parseInt(capacities.get(venueIndex));
         break;
       }
       venueIndex++;
     }
     venueIndex = 0;
+    int bookingOccupied = Integer.parseInt(options[3]);
 
 
 
@@ -201,6 +204,15 @@ public class VenueHireSystem {
       bookingIndex++;
     }
     bookingIndex = 0;
+    if (venueCapacity < bookingOccupied) {
+      MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], Integer.toString(venueCapacity), Integer.toString(venueCapacity));
+      bookingOccupied = venueCapacity;
+    }
+    int oneForth = (int)(venueCapacity * 0.25);
+    if (oneForth > bookingOccupied) {
+      MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], Integer.toString(oneForth), Integer.toString(venueCapacity));
+      bookingOccupied = oneForth;
+    }
 
 
 
@@ -210,7 +222,7 @@ public class VenueHireSystem {
     bookingVenue.add(options[0]);
     bookingDate.add(options[1]);
     bookingEmail.add(options[2]);
-    bookingOccupants.add(options[3]);
+    bookingOccupants.add(Integer.toString(bookingOccupied));
     numOfBookings++;
     MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookRef, venueName, options[1], options[3]);
 
