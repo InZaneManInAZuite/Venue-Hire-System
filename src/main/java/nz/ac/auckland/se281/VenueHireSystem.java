@@ -12,17 +12,19 @@ public class VenueHireSystem {
   ArrayList<String> capacities = new ArrayList<String>();
   ArrayList<String> hireFees = new ArrayList<String>();
   private int numOfVenues = 0;
-  private int venueIndex = 0;
-
+  
   // Store all booking information
   ArrayList<String> bookingCode = new ArrayList<String>();
   ArrayList<String> bookingVenue = new ArrayList<String>();
   ArrayList<String> bookingDate = new ArrayList<String>();
   ArrayList<String> bookingEmail = new ArrayList<String>();
   ArrayList<String> bookingOccupants = new ArrayList<String>();
-
+  private int numOfBookings = 0;
+  
   // Store all important system information
   private String systemDate = "";
+  private int venueIndex = 0;
+  private int bookingIndex = 0;
 
   public VenueHireSystem() {}
 
@@ -163,18 +165,20 @@ public class VenueHireSystem {
   public void makeBooking(String[] options) {
     // TODO implement this method
 
-    // Obtain venue
+    // Obtain booking's venue details
     String venueCode = "";
-    int index = -1;
+    String venueName = "";
     while (venueIndex < numOfVenues) {
       if (options[0].compareTo(venueCodes.get(venueIndex)) == 0) {
         venueCode = options[0];
-        index = venueIndex;
+        venueName = venueNames.get(venueIndex);
         break;
       }
       venueIndex++;
     }
     venueIndex = 0;
+
+
 
     // Checks if making a booking is possible
     if (systemDate.isEmpty()) {
@@ -188,15 +192,27 @@ public class VenueHireSystem {
     if (venueCode.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage();
     }
+    while (bookingIndex < numOfBookings)  {
+      if ((venueCode.compareTo(bookingVenue.get(bookingIndex)) == 0) & (options[1].compareTo(bookingDate.get(bookingIndex))==0)) {
+        MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueName, options[1]);
+        bookingIndex = 0;
+        return;
+      }
+      bookingIndex++;
+    }
+    bookingIndex = 0;
 
-    // Confirm booking to user
+
+
+    // Make and confirm booking to user
     String bookRef = BookingReferenceGenerator.generateBookingReference();
     bookingCode.add(bookRef);
     bookingVenue.add(options[0]);
     bookingDate.add(options[1]);
     bookingEmail.add(options[2]);
     bookingOccupants.add(options[3]);
-    MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookRef, venueNames.get(index), options[1], options[3]);
+    numOfBookings++;
+    MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookRef, venueName, options[1], options[3]);
 
   }
 
