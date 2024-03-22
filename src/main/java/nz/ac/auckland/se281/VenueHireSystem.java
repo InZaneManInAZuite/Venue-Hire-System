@@ -6,12 +6,22 @@ import java.util.ArrayList;
 
 public class VenueHireSystem {
 
+  // Store all available venue information
   ArrayList<String> venueNames = new ArrayList<String>();
   ArrayList<String> venueCodes = new ArrayList<String>();
   ArrayList<String> capacities = new ArrayList<String>();
   ArrayList<String> hireFees = new ArrayList<String>();
   private int numOfVenues = 0;
   private int venueIndex = 0;
+
+  // Store all booking information
+  ArrayList<String> bookingCode = new ArrayList<String>();
+  ArrayList<String> bookingVenue = new ArrayList<String>();
+  ArrayList<String> bookingDate = new ArrayList<String>();
+  ArrayList<String> bookingEmail = new ArrayList<String>();
+  ArrayList<String> bookingOccupants = new ArrayList<String>();
+
+  // Store all important system information
   private String systemDate = "";
 
   public VenueHireSystem() {}
@@ -181,7 +191,13 @@ public class VenueHireSystem {
 
     // Confirm booking to user
     String bookRef = BookingReferenceGenerator.generateBookingReference();
+    bookingCode.add(bookRef);
+    bookingVenue.add(options[0]);
+    bookingDate.add(options[1]);
+    bookingEmail.add(options[2]);
+    bookingOccupants.add(options[3]);
     MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookRef, venueNames.get(index), options[1], options[3]);
+
   }
 
   public void printBookings(String venueCode) {
