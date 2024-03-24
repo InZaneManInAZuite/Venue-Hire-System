@@ -23,8 +23,6 @@ public class VenueHireSystem {
   
   // Store all important system information
   private String systemDate = "";
-  private int venueIndex = 0;
-  private int bookingIndex = 0;
 
   public VenueHireSystem() {}
 
@@ -77,11 +75,10 @@ public class VenueHireSystem {
     }
 
     // Print all the venues and their details
-    while (venueIndex < numOfVenues) {
-      MessageCli.VENUE_ENTRY.printMessage(venueNames.get(venueIndex), venueCodes.get(venueIndex), capacities.get(venueIndex), hireFees.get(venueIndex), "TODO");
-      venueIndex++;
+    for (int i = 0; i < numOfVenues; i++) {
+      MessageCli.VENUE_ENTRY.printMessage(venueNames.get(i), venueCodes.get(i), capacities.get(i), hireFees.get(i), "TODO");
     }
-    venueIndex = 0;
+
     return;
   }
 
@@ -125,15 +122,12 @@ public class VenueHireSystem {
     }
 
     // Checks if venue code is duplicated
-    while (venueIndex < numOfVenues) {
-      if (venueCode.compareTo(venueCodes.get(venueIndex)) == 0) {
-        MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venueNames.get(venueIndex));
-        venueIndex = 0;
+    for (int i = 0; i < numOfVenues; i++) {
+      if (venueCode.equals(venueCodes.get(i))) {
+        MessageCli.VENUE_NOT_CREATED_CODE_EXISTS.printMessage(venueCode, venueNames.get(i));
         return;
       }
-      venueIndex++;
     }
-    venueIndex = 0;
 
     // Add venues into the system
     venueNames.add(venueName);
@@ -169,16 +163,15 @@ public class VenueHireSystem {
     String venueCode = "";
     String venueName = "";
     int venueCapacity = 0;
-    while (venueIndex < numOfVenues) {
-      if (options[0].compareTo(venueCodes.get(venueIndex)) == 0) {
+    for (int i = 0; i < numOfVenues; i++) {
+      if (options[0].equals(venueCodes.get(i))) {
         venueCode = options[0];
-        venueName = venueNames.get(venueIndex);
-        venueCapacity = Integer.parseInt(capacities.get(venueIndex));
+        venueName = venueNames.get(i);
+        venueCapacity = Integer.parseInt(capacities.get(i));
         break;
       }
-      venueIndex++;
     }
-    venueIndex = 0;
+
     int bookingOccupied = Integer.parseInt(options[3]);
 
 
@@ -195,15 +188,13 @@ public class VenueHireSystem {
     if (venueCode.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage();
     }
-    while (bookingIndex < numOfBookings)  {
-      if ((venueCode.compareTo(bookingVenue.get(bookingIndex)) == 0) & (options[1].compareTo(bookingDate.get(bookingIndex))==0)) {
+    for (int j = 0; j < numOfBookings; j++){
+      if (venueCode.equals(bookingVenue.get(j)) && options[1].equals(bookingDate.get(j))){
         MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueName, options[1]);
         bookingIndex = 0;
         return;
       }
-      bookingIndex++;
     }
-    bookingIndex = 0;
     if (venueCapacity < bookingOccupied) {
       MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], Integer.toString(venueCapacity), Integer.toString(venueCapacity));
       bookingOccupied = venueCapacity;
