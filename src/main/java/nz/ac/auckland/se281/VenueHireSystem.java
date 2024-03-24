@@ -273,6 +273,17 @@ public class VenueHireSystem {
         return;
       }
     }
+    Calendar systemDateCal = new GregorianCalendar();
+    Calendar bookingDateCal = new GregorianCalendar();
+    String[] currentDateSplit = systemDate.split("/");
+    systemDateCal.set(Integer.parseInt(currentDateSplit[2]), Integer.parseInt(currentDateSplit[1]), Integer.parseInt(currentDateSplit[0]));
+    String[] bookingDateSplit = bookingDate.split("/");
+    bookingDateCal.set(Integer.parseInt(bookingDateSplit[2]), Integer.parseInt(bookingDateSplit[1]), Integer.parseInt(bookingDateSplit[0]));
+    if (bookingDateCal.before(systemDateCal)) {
+      MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(bookingDate, systemDate);
+      return;
+    }
+
 
 
 
