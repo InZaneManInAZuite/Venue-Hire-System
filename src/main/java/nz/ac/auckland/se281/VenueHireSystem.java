@@ -2,6 +2,7 @@ package nz.ac.auckland.se281;
 
 import nz.ac.auckland.se281.Types.CateringType;
 import nz.ac.auckland.se281.Types.FloralType;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -36,8 +37,8 @@ public class VenueHireSystem {
       MessageCli.NO_VENUES.printMessage();
     }
 
-
-
+   
+   
     // Print text if number of venues is less than 10
     if (numOfVenues < 10) {
       switch (numOfVenues) {
@@ -73,8 +74,8 @@ public class VenueHireSystem {
       }
     }
 
-
-
+    
+    
     // If number of venues is 10 or greater
     if (numOfVenues >= 10) {
       MessageCli.NUMBER_VENUES.printMessage("are", Integer.toString(numOfVenues),"s");
@@ -96,67 +97,60 @@ public class VenueHireSystem {
         earliestDate.set(Calendar.MONTH, Integer.parseInt(systemDateSplit[1]));
         earliestDate.set(Calendar.DAY_OF_MONTH, Integer.parseInt(systemDateSplit[0]));
       }
-
-
-
-      // Obtain earliest date available for venue
-      // Start checking system date
-      Calendar date = new GregorianCalendar();
-      ArrayList<Calendar> venueDates = new ArrayList<Calendar>();
+      
+      // Check which dates the venue is booked
+      ArrayList<String> venueDates = new ArrayList<String>();
       int venueUsed = 0;
       for (int j = 0; j < numOfBookings; j++) {
         if (venueCodes.get(i).equals(bookingCodes.get(j))) {
-          String[] bookingDateSplit = bookingDates.get(j).split("/");
-          date.set(Calendar.YEAR, Integer.parseInt(bookingDateSplit[2]));
-          date.set(Calendar.MONTH, Integer.parseInt(bookingDateSplit[1]));
-          date.set(Calendar.DAY_OF_MONTH, Integer.parseInt(bookingDateSplit[0]));
-          venueDates.add(date);
+          venueDates.add(bookingDates.get(j));
           venueUsed++;
         }
       }
 
+      // Initiates the process of finding the earliest available date
+      String dayString = Integer.toString(earliestDate.get(Calendar.DAY_OF_MONTH));
+      String monthString = Integer.toString(earliestDate.get(Calendar.MONTH));
+      String yearString = Integer.toString(earliestDate.get(Calendar.YEAR));
+      if (Integer.parseInt(dayString) < 10) {
+        dayString = "0" + dayString;} 
+      if (Integer.parseInt(monthString) < 10) {
+        monthString = "0" + monthString;}
+      String earliestString = dayString + "/" + monthString + "/" + yearString;
       boolean dateFound = false;
-      
       if (venueUsed == 0) {
         dateFound = true;
       }
 
+      // Checks each booked date to find the earliest available date
       while (dateFound == false) {
-        for (int k = 0; k < venueUsed; k++) {
 
-          if (earliestDate.before(venueDates.get(k))) {
-            venueDates.remove(k);
-            venueUsed--;
+        // Check if the potential earliest date is already booked
+        for (int k = 0; k < venueUsed; k++) {
+          if (earliestString.equals(venueDates.get(k))){
             break;
           }
-
-          if (k == venueUsed - 1 && !earliestDate.equals(venueDates.get(k))) {
+          if (k == venueUsed - 1) {
             dateFound = true;
             break;
           }
         }
-        earliestDate.add(Calendar.DAY_OF_MONTH, 1);
-      }
-      
-      // Convert earliest date to string
-      String dayString = "";
-      String monthString = "";
-      if (earliestDate.get(Calendar.DAY_OF_MONTH) < 10) {
-        dayString = "0" + Integer.toString(earliestDate.get(Calendar.DAY_OF_MONTH));
-      } else {
-        dayString = Integer.toString(earliestDate.get(Calendar.DAY_OF_MONTH));
-      }
 
-      if (earliestDate.get(Calendar.MONTH) < 10) {
-        monthString = "0" + Integer.toString(earliestDate.get(Calendar.MONTH));
-      } else {
-        monthString = Integer.toString(earliestDate.get(Calendar.MONTH));
+        // If the potential earliest date is already booked, move to the next day
+        if (dateFound == false) {
+          earliestDate.add(Calendar.DAY_OF_MONTH, 1);
+          dayString = Integer.toString(earliestDate.get(Calendar.DAY_OF_MONTH));
+          monthString = Integer.toString(earliestDate.get(Calendar.MONTH));
+          yearString = Integer.toString(earliestDate.get(Calendar.YEAR));
+          if (Integer.parseInt(dayString) < 10) {
+            dayString = "0" + dayString;} 
+          if (Integer.parseInt(monthString) < 10) {
+            monthString = "0" + monthString;}
+          earliestString = dayString + "/" + monthString + "/" + yearString;
+        }
       }
-
-      String yearString = Integer.toString(earliestDate.get(Calendar.YEAR));
-      String earliestDateStr = dayString + "/" + monthString + "/" + yearString;
-
-      MessageCli.VENUE_ENTRY.printMessage(venueNames.get(i), venueCodes.get(i), capacities.get(i), hireFees.get(i), earliestDateStr);
+  
+      MessageCli.VENUE_ENTRY.printMessage(venueNames.get(i), venueCodes.get(i), capacities.get(i), hireFees.get(i), earliestString);
     }
 
     return;
