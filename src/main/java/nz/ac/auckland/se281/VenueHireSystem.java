@@ -307,9 +307,11 @@ public class VenueHireSystem {
 
     // Find the venue name
     boolean venueFound = false;
+    String venueName = "";
     for (int i = 0; i < numOfVenues; i++) {
       if (venueCode.equals(venueCodes.get(i))) {
-        MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
+        venueName = venueNames.get(i);
+        MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueName);
         venueFound = true;
       }
     }
@@ -334,7 +336,7 @@ public class VenueHireSystem {
 
     // If the venue is not booked, print message
     if (venueUsed == 0) {
-      MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueCode);
+      MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueName);
       return;
     }
 
