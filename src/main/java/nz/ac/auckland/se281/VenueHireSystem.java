@@ -14,11 +14,11 @@ public class VenueHireSystem {
   private int numOfVenues = 0;
   
   // Store all booking information
-  ArrayList<String> bookingCode = new ArrayList<String>();
-  ArrayList<String> bookingVenue = new ArrayList<String>();
-  ArrayList<String> bookingDate = new ArrayList<String>();
-  ArrayList<String> bookingEmail = new ArrayList<String>();
-  ArrayList<String> bookingOccupants = new ArrayList<String>();
+  ArrayList<String> bookingRefs = new ArrayList<String>();
+  ArrayList<String> bookingCodes = new ArrayList<String>();
+  ArrayList<String> bookingDates = new ArrayList<String>();
+  ArrayList<String> bookingEmails = new ArrayList<String>();
+  ArrayList<String> bookingAttendees = new ArrayList<String>();
   private int numOfBookings = 0;
   
   // Store all important system information
@@ -159,21 +159,27 @@ public class VenueHireSystem {
   public void makeBooking(String[] options) {
     // TODO implement this method
 
+    // Obtain booking details
+    String bookingCode = options[0];
+    String bookingDate = options[1];
+    String bookingEmail = options[2];
+    String bookingAttendee = options[3];
+
+
+    
     // Obtain booking's venue details
     String venueCode = "";
     String venueName = "";
     int venueCapacity = 0;
     for (int i = 0; i < numOfVenues; i++) {
-      if (options[0].equals(venueCodes.get(i))) {
-        venueCode = options[0];
+      if (bookingCode.equals(venueCodes.get(i))) {
+        venueCode = bookingCode;
         venueName = venueNames.get(i);
         venueCapacity = Integer.parseInt(capacities.get(i));
         break;
       }
     }
-
-    int bookingOccupied = Integer.parseInt(options[3]);
-
+    
 
 
     // Checks if making a booking is possible
@@ -189,33 +195,38 @@ public class VenueHireSystem {
       MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage();
     }
     for (int j = 0; j < numOfBookings; j++){
-      if (venueCode.equals(bookingVenue.get(j)) && options[1].equals(bookingDate.get(j))){
-        MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueName, options[1]);
+      if (venueCode.equals(bookingCodes.get(j)) && bookingDate.equals(bookingDates.get(j))){
+        MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueName, bookingDate);
         return;
       }
     }
-    if (venueCapacity < bookingOccupied) {
+
+
+
+    // Adjust booking attendee number if attendee is too large or too small
+    int bookingToBeOccupied = Integer.parseInt(bookingAttendee);
+    if (venueCapacity < bookingToBeOccupied) {
       MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], Integer.toString(venueCapacity), Integer.toString(venueCapacity));
-      bookingOccupied = venueCapacity;
+      bookingToBeOccupied = venueCapacity;
     }
     int oneForth = (int)(venueCapacity * 0.25);
-    if (oneForth > bookingOccupied) {
+    if (oneForth > bookingToBeOccupied) {
       MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(options[3], Integer.toString(oneForth), Integer.toString(venueCapacity));
-      bookingOccupied = oneForth;
+      bookingToBeOccupied = oneForth;
     }
+    bookingAttendee = Integer.toString(bookingToBeOccupied);
 
 
 
     // Make and confirm booking to user
-    String bookRef = BookingReferenceGenerator.generateBookingReference();
-    bookingCode.add(bookRef);
-    bookingVenue.add(options[0]);
-    bookingDate.add(options[1]);
-    bookingEmail.add(options[2]);
-    bookingOccupants.add(Integer.toString(bookingOccupied));
+    String bookingRef = BookingReferenceGenerator.generateBookingReference();
+    bookingRefs.add(bookingRef);
+    bookingCodes.add(bookingCode);
+    bookingDates.add(bookingDate);
+    bookingEmails.add(bookingEmail);
+    bookingAttendees.add(bookingAttendee);
     numOfBookings++;
-    MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookRef, venueName, options[1], options[3]);
-
+    MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookingRef, venueName, bookingDate, bookingAttendee);
   }
 
   public void printBookings(String venueCode) {
