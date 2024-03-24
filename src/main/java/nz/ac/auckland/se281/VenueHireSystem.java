@@ -419,9 +419,35 @@ public class VenueHireSystem {
 
   public void addServiceFloral(String bookingReference, FloralType floralType) {
     // TODO implement this method
+
+    // Check if booking reference exists
+    boolean bookingExists = false;
+    for (int j = 0; j < numOfBookings; j++) {
+      if (bookingReference.equals(bookingRefs.get(j))) {
+        bookingExists = true;
+        break;
+      }
+    }
+    if (!bookingExists) {
+      MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Floral", bookingReference);
+      return;
+    }
+
+    // Add music service to record
+    if (floralType == Types.FloralType.DELUXE) {
+      serviceCosts.add(1000);
+    } else {
+      serviceCosts.add(550);
+    }
+    serviceNames.add(floralType.getName());
+    serviceRefs.add(bookingReference);
+    numOfServices++;
+    MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Floral (" + floralType.getName() + ")", bookingReference);
   }
 
   public void viewInvoice(String bookingReference) {
     // TODO implement this method
+
+    
   }
 }
