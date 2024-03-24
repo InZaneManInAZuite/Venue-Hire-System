@@ -30,6 +30,7 @@ public class VenueHireSystem {
   private ArrayList<String> serviceRefs = new ArrayList<String>();
   private ArrayList<String> serviceNames = new ArrayList<String>();
   private ArrayList<Integer> serviceCosts = new ArrayList<Integer>();
+  private ArrayList<String> serviceTypes = new ArrayList<String>();
   private int numOfServices = 0;
   
   // Store all important system information
@@ -391,6 +392,7 @@ public class VenueHireSystem {
     serviceRefs.add(bookingReference);
     serviceNames.add(cateringType.getName());
     serviceCosts.add(Integer.parseInt(bookingAttendee) * cateringType.getCostPerPerson());
+    serviceTypes.add("Catering");
     numOfServices++;
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Catering (" + cateringType.getName() + ")", bookingReference);
 
@@ -417,6 +419,7 @@ public class VenueHireSystem {
     serviceCosts.add(500);
     serviceNames.add("Music");
     serviceRefs.add(bookingReference);
+    serviceTypes.add("Music");
     numOfServices++;
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Music", bookingReference);
   }
@@ -445,6 +448,7 @@ public class VenueHireSystem {
     }
     serviceNames.add(floralType.getName());
     serviceRefs.add(bookingReference);
+    serviceTypes.add("Floral");
     numOfServices++;
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Floral (" + floralType.getName() + ")", bookingReference);
   }
@@ -488,16 +492,19 @@ public class VenueHireSystem {
     }
     for (int k = 0; k < numOfServices; k++) {
       if (bookingReference.equals(serviceRefs.get(k))) {
-        if (serviceNames.get(k).equals("Music")) {
-          MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(Integer.toString(serviceCosts.get(k))); 
+        String cost = Integer.toString(serviceCosts.get(k));
+        if (serviceTypes.get(k).equals("Music")) {
+          MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(cost); 
+        } else if (serviceTypes.get(k).equals("Floral")) {
+          MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(serviceNames.get(k), cost);
         } else {
-          MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(serviceNames.get(k), Integer.toString(serviceCosts.get(k)));
+          MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(serviceNames.get(k), cost);
         }
         sum += serviceCosts.get(k);
       }
     }
 
-
+    
     // Print bottom half of the invoice
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(Integer.toString(sum));
   }
