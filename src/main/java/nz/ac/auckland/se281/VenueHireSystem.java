@@ -83,7 +83,6 @@ public class VenueHireSystem {
 
 
 
-
     // Print all the venues and their details
     for (int i = 0; i < numOfVenues; i++) {
 
@@ -305,6 +304,46 @@ public class VenueHireSystem {
 
   public void printBookings(String venueCode) {
     // TODO implement this method
+
+    // Find the venue name
+    boolean venueFound = false;
+    for (int i = 0; i < numOfVenues; i++) {
+      if (venueCode.equals(venueCodes.get(i))) {
+        MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueNames.get(i));
+        venueFound = true;
+      }
+    }
+    if (venueFound == false) {
+      MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
+      return;
+    }
+
+    // Check which booking references and dates the venue is booked for
+    ArrayList<String> venueDates = new ArrayList<String>();
+    ArrayList<String> venueRefs = new ArrayList<String>();
+    int venueUsed = 0;
+    for (int j = 0; j < numOfBookings; j++) {
+      if (venueCode.equals(bookingCodes.get(j))) {
+        venueDates.add(bookingDates.get(j));
+        venueRefs.add(bookingRefs.get(j));
+        venueUsed++;
+      }
+    }
+
+
+
+    // If the venue is not booked, print message
+    if (venueUsed == 0) {
+      MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueCode);
+      return;
+    }
+
+
+
+    // Print all the bookings for the venue
+    for (int k = 0; k < venueUsed; k++) {
+      MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(venueRefs.get(k), venueDates.get(k));
+    }
   }
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
