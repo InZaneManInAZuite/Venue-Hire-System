@@ -10,19 +10,26 @@ import java.util.GregorianCalendar;
 public class VenueHireSystem {
 
   // Store all available venue information
-  ArrayList<String> venueNames = new ArrayList<String>();
-  ArrayList<String> venueCodes = new ArrayList<String>();
-  ArrayList<String> capacities = new ArrayList<String>();
-  ArrayList<String> hireFees = new ArrayList<String>();
+  private ArrayList<String> venueNames = new ArrayList<String>();
+  private ArrayList<String> venueCodes = new ArrayList<String>();
+  private ArrayList<String> capacities = new ArrayList<String>();
+  private ArrayList<String> hireFees = new ArrayList<String>();
   private int numOfVenues = 0;
   
   // Store all booking information
-  ArrayList<String> bookingRefs = new ArrayList<String>();
-  ArrayList<String> bookingCodes = new ArrayList<String>();
-  ArrayList<String> bookingDates = new ArrayList<String>();
-  ArrayList<String> bookingEmails = new ArrayList<String>();
-  ArrayList<String> bookingAttendees = new ArrayList<String>();
+  private ArrayList<String> bookingRefs = new ArrayList<String>();
+  private ArrayList<String> bookingCodes = new ArrayList<String>();
+  private ArrayList<String> bookingDates = new ArrayList<String>();
+  private ArrayList<String> bookingEmails = new ArrayList<String>();
+  private ArrayList<String> bookingAttendees = new ArrayList<String>();
   private int numOfBookings = 0;
+
+  // Store all service information
+  private ArrayList<String> serviceRefs = new ArrayList<String>();
+  private ArrayList<CateringType> serviceCaterTypes = new ArrayList<CateringType>();
+  private ArrayList<String> serviceCaterNames = new ArrayList<String>();
+  private ArrayList<Integer> serviceCaterCost = new ArrayList<Integer>();
+  private int numOfServices = 0;
   
   // Store all important system information
   private String systemDate = "";
@@ -361,6 +368,31 @@ public class VenueHireSystem {
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
     // TODO implement this method
+    
+    // Check if booking reference exists
+    boolean bookingExists = false;
+    String bookingAttendee = "";
+    for (int j = 0; j < numOfBookings; j++) {
+      if (bookingReference.equals(bookingRefs.get(j))) {
+        bookingAttendee = bookingAttendees.get(j);
+        bookingExists = true;
+        break;
+      }
+    }
+    if (!bookingExists) {
+      MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Catering", bookingReference);
+      return;
+    }
+
+    // Complete the service order
+    serviceRefs.add(bookingReference);
+    serviceCaterNames.add(cateringType.getName());
+    serviceCaterTypes.add(cateringType);
+    serviceCaterCost.add(Integer.parseInt(bookingAttendee) * cateringType.getCostPerPerson());
+    numOfServices++;
+    MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Catering (" + cateringType.getName() + ")", bookingReference);
+
+
   }
 
   public void addServiceMusic(String bookingReference) {
