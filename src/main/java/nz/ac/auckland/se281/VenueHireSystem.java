@@ -26,9 +26,8 @@ public class VenueHireSystem {
 
   // Store all service information
   private ArrayList<String> serviceRefs = new ArrayList<String>();
-  private ArrayList<CateringType> serviceCaterTypes = new ArrayList<CateringType>();
-  private ArrayList<String> serviceCaterNames = new ArrayList<String>();
-  private ArrayList<Integer> serviceCaterCost = new ArrayList<Integer>();
+  private ArrayList<String> serviceNames = new ArrayList<String>();
+  private ArrayList<Integer> serviceCosts = new ArrayList<Integer>();
   private int numOfServices = 0;
   
   // Store all important system information
@@ -386,9 +385,8 @@ public class VenueHireSystem {
 
     // Complete the service order
     serviceRefs.add(bookingReference);
-    serviceCaterNames.add(cateringType.getName());
-    serviceCaterTypes.add(cateringType);
-    serviceCaterCost.add(Integer.parseInt(bookingAttendee) * cateringType.getCostPerPerson());
+    serviceNames.add(cateringType.getName());
+    serviceCosts.add(Integer.parseInt(bookingAttendee) * cateringType.getCostPerPerson());
     numOfServices++;
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Catering (" + cateringType.getName() + ")", bookingReference);
 
@@ -397,6 +395,26 @@ public class VenueHireSystem {
 
   public void addServiceMusic(String bookingReference) {
     // TODO implement this method
+
+    // Check if booking reference exists
+    boolean bookingExists = false;
+    for (int j = 0; j < numOfBookings; j++) {
+      if (bookingReference.equals(bookingRefs.get(j))) {
+        bookingExists = true;
+        break;
+      }
+    }
+    if (!bookingExists) {
+      MessageCli.SERVICE_NOT_ADDED_BOOKING_NOT_FOUND.printMessage("Music", bookingReference);
+      return;
+    }
+
+    // Add music service to record
+    serviceCosts.add(500);
+    serviceNames.add("Music");
+    serviceRefs.add(bookingReference);
+    numOfServices++;
+    MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage("Music", bookingReference);
   }
 
   public void addServiceFloral(String bookingReference, FloralType floralType) {
