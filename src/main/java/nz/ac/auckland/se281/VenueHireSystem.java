@@ -22,6 +22,8 @@ public class VenueHireSystem {
   private ArrayList<String> bookingDates = new ArrayList<String>();
   private ArrayList<String> bookingEmails = new ArrayList<String>();
   private ArrayList<String> bookingAttendees = new ArrayList<String>();
+  private ArrayList<String> bookingMades = new ArrayList<String>();
+  private ArrayList<String> bookingNames = new ArrayList<String>();
   private int numOfBookings = 0;
 
   // Store all service information
@@ -315,6 +317,8 @@ public class VenueHireSystem {
     bookingDates.add(bookingDate);
     bookingEmails.add(bookingEmail);
     bookingAttendees.add(bookingAttendee);
+    bookingMades.add(systemDate);
+    bookingNames.add(venueName);
     numOfBookings++;
     MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(bookingRef, venueName, bookingDate, bookingAttendee);
   }
@@ -448,6 +452,53 @@ public class VenueHireSystem {
   public void viewInvoice(String bookingReference) {
     // TODO implement this method
 
-    
+    // Check if booking reference exists
+    boolean bookingExists = false;
+    String code = "", email = "", made = "", date = "", guests = "", name = "";
+    for (int j = 0; j < numOfBookings; j++) {
+      if (bookingReference.equals(bookingRefs.get(j))) {
+        bookingExists = true;
+        code = bookingCodes.get(j);
+        email = bookingEmails.get(j);
+        made = bookingMades.get(j);
+        date = bookingDates.get(j);
+        guests = bookingAttendees.get(j);
+        name = bookingNames.get(j);
+        break;
+      }
+    }
+    if (!bookingExists) {
+      MessageCli.VIEW_INVOICE_BOOKING_NOT_FOUND.printMessage(bookingReference);
+      return;
+    }
+
+    // Print first half of the invoice
+    MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(bookingReference, email, made, date, guests, name);
+
+    // Obtain details for the middle body of the invoice
+    int sum = 0;
+    String venueCost;
+    for (int i = 0; i < numOfVenues; i++) {
+      if (code.equals(venueCodes.get(i))) {
+        venueCost = hireFees.get(i);
+        MessageCli.INVOICE_CONTENT_VENUE_FEE.printMessage(venueCost);
+        sum += Integer.parseInt(venueCost);
+        break;
+      }
+    }
+    for (int k = 0; k < numOfServices; k++) {
+      if (bookingReference.equals(serviceRefs.get(k))) {
+        if (serviceNames.get(k).equals("Music")) {
+          MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(Integer.toString(serviceCosts.get(k))); 
+        } else {
+          MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(serviceNames.get(k), Integer.toString(serviceCosts.get(k)));
+        }
+        sum += serviceCosts.get(k);
+      }
+    }
+
+
+    // Print bottom half of the invoice
+    MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(Integer.toString(sum));
   }
 }
