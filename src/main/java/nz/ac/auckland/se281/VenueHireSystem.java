@@ -191,7 +191,6 @@ public class VenueHireSystem {
     for (int j = 0; j < numOfBookings; j++){
       if (venueCode.equals(bookingVenue.get(j)) && options[1].equals(bookingDate.get(j))){
         MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueName, options[1]);
-        bookingIndex = 0;
         return;
       }
     }
