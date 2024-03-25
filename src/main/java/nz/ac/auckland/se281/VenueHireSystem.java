@@ -10,6 +10,7 @@ import java.util.GregorianCalendar;
 public class VenueHireSystem {
 
   // Store all available venue information
+  private ArrayList<Venue> venues = new ArrayList<Venue>();
   private ArrayList<String> venueNames = new ArrayList<String>();
   private ArrayList<String> venueCodes = new ArrayList<String>();
   private ArrayList<String> capacities = new ArrayList<String>();
@@ -17,6 +18,7 @@ public class VenueHireSystem {
   private int numOfVenues = 0;
   
   // Store all booking information
+  private ArrayList<Booking> bookings = new ArrayList<Booking>();
   private ArrayList<String> bookingRefs = new ArrayList<String>();
   private ArrayList<String> bookingCodes = new ArrayList<String>();
   private ArrayList<String> bookingDates = new ArrayList<String>();
@@ -504,7 +506,7 @@ public class VenueHireSystem {
       }
     }
 
-    
+
     // Print bottom half of the invoice
     MessageCli.INVOICE_CONTENT_BOTTOM_HALF.printMessage(Integer.toString(sum));
   }
