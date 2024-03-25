@@ -5,13 +5,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Venue {
-  private String name;
-  private String venueCode;
-  private String capacity;
-  private String hireFee;
-  private String earliest;
-  private ArrayList<Booking> bookings = new ArrayList<Booking>();
-  private int numOfVenueBookings = 0;
+  public String name;
+  public String venueCode;
+  public String capacity;
+  public String hireFee;
+  public String earliest;
+  public ArrayList<Booking> bookings = new ArrayList<Booking>();
+  public int numOfVenueBookings = 0;
 
   public Venue() {}
 
