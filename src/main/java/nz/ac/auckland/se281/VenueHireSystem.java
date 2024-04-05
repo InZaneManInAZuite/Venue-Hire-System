@@ -87,8 +87,29 @@ public class VenueHireSystem {
       MessageCli.NUMBER_VENUES.printMessage("are", Integer.toString(numOfVenues), "s");
     }
 
+    // If no system date is set, set it to the current date temporarily
+    String tempDate = systemDate;
+    if (tempDate.isEmpty()) {
+      Calendar currentDate = new GregorianCalendar();
+      currentDate = Calendar.getInstance();
+      tempDate =
+          currentDate.get(Calendar.DAY_OF_MONTH)
+              + "/"
+              + currentDate.get(Calendar.MONTH)
+              + "/"
+              + currentDate.get(Calendar.YEAR);
+
+      if (currentDate.get(Calendar.DAY_OF_MONTH) < 10) {
+        tempDate = "0" + tempDate;
+      }
+    }
+
     // Print all the venues and their details
     for (int i = 0; i < numOfVenues; i++) {
+
+      if (venues.get(i).getEarliest() == null) {
+        venues.get(i).setEarliest(tempDate);
+      }
 
       MessageCli.VENUE_ENTRY.printMessage(
           venues.get(i).getName(),
@@ -159,6 +180,11 @@ public class VenueHireSystem {
     // TODO implement this method
 
     systemDate = dateInput;
+
+    for (int i = 0; i < numOfVenues; i++) {
+      venues.get(i).setEarliest(dateInput);
+    }
+
     MessageCli.DATE_SET.printMessage(systemDate);
   }
 

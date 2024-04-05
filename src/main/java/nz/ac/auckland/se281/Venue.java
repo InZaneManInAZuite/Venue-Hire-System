@@ -45,6 +45,12 @@ public class Venue {
     return this.earliest;
   }
 
+  public void setEarliest(String earliest) {
+    if (this.earliest == null) {
+      this.earliest = earliest;
+    }
+  }
+
   // Check if the date is already booked
   public boolean isDateBooked(String date) {
     for (int i = 0; i < numOfVenueBookings; i++) {
@@ -59,6 +65,7 @@ public class Venue {
   public void addBooking(Booking booking) {
     bookings.add(booking);
     numOfVenueBookings++;
+
     while (isDateBooked(this.earliest)) {
       incrementEarliest();
     }
