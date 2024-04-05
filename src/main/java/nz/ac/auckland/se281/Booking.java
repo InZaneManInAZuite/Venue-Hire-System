@@ -18,12 +18,19 @@ public class Booking {
 
   public Booking() {}
 
-  public Booking(String ref, String checkIn, String email, String venueCode, String attendee) {
+  public Booking(
+      String ref,
+      String checkIn,
+      String email,
+      String venueCode,
+      String attendee,
+      String bookDate) {
     this.ref = ref;
     this.checkIn = checkIn;
     this.email = email;
     this.venueCode = venueCode;
     this.attendee = attendee;
+    this.bookDate = bookDate;
   }
 
   public void add(Service service) {

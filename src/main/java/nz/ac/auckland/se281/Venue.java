@@ -45,7 +45,7 @@ public class Venue {
     return this.earliest;
   }
 
-  public void setEarliest(String earliest) {
+  public void setEmptyEarliest(String earliest) {
     if (this.earliest == null) {
       this.earliest = earliest;
     }
@@ -66,9 +66,12 @@ public class Venue {
     bookings.add(booking);
     numOfVenueBookings++;
 
-    while (isDateBooked(this.earliest)) {
-      incrementEarliest();
+    if (this.earliest == booking.checkIn) {
+      while (isDateBooked(this.earliest)) {
+        incrementEarliest();
+      }
     }
+    return;
   }
 
   // Modify the earliest available date of the venue
@@ -97,5 +100,14 @@ public class Venue {
     if (date.get(Calendar.DAY_OF_MONTH) < 10) {
       this.earliest = "0" + this.earliest;
     }
+  }
+
+  public void updateEarliest(String newSystemDate) {
+
+    this.earliest = newSystemDate;
+    while (isDateBooked(this.earliest)) {
+      incrementEarliest();
+    }
+    return;
   }
 }

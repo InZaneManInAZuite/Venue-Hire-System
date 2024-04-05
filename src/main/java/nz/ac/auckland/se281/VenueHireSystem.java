@@ -108,7 +108,7 @@ public class VenueHireSystem {
     for (int i = 0; i < numOfVenues; i++) {
 
       if (venues.get(i).getEarliest() == null) {
-        venues.get(i).setEarliest(tempDate);
+        venues.get(i).setEmptyEarliest(tempDate);
       }
 
       MessageCli.VENUE_ENTRY.printMessage(
@@ -179,12 +179,27 @@ public class VenueHireSystem {
   public void setSystemDate(String dateInput) {
     // TODO implement this method
 
-    systemDate = dateInput;
-
-    for (int i = 0; i < numOfVenues; i++) {
-      venues.get(i).setEarliest(dateInput);
+    // Check if the system date was not set before
+    boolean systemWasSet = false;
+    if (!systemDate.isEmpty()) {
+      systemWasSet = true;
     }
 
+    // Set the system date
+    systemDate = dateInput;
+
+    // Update the earliest available date for all venues
+    if (systemWasSet) {
+      for (int i = 0; i < numOfVenues; i++) {
+        venues.get(i).updateEarliest(dateInput);
+      }
+    } else {
+      for (int i = 0; i < numOfVenues; i++) {
+        venues.get(i).setEmptyEarliest(dateInput);
+      }
+    }
+
+    // Print the system date
     MessageCli.DATE_SET.printMessage(systemDate);
   }
 
@@ -203,86 +218,99 @@ public class VenueHireSystem {
     // TODO implement this method
 
     // Obtain booking details
-    String bookingCode = options[0];
-    String bookingDate = options[1];
-    String bookingEmail = options[2];
-    String bookingAttendee = options[3];
+    String bookCode = options[0];
+    String bookCheckIn = options[1];
+    String bookEmail = options[2];
+    String bookAttendee = options[3];
+
+    // Checks if system date is set
+    if (systemDate.isEmpty()) {
+      MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
+      return;
+    }
+
+    // Checks if there are venues
+    if (numOfVenues == 0) {
+      MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
+      return;
+    }
+
+    // Check if booking date is in the past
+    // Obtain the system date and booking date as Calendar objects
+    String[] systemSplit = systemDate.split("/");
+    String[] bookingSplit = bookCheckIn.split("/");
+    Calendar systemCal = new GregorianCalendar();
+    Calendar bookingCal = new GregorianCalendar();
+    systemCal.set(
+        Integer.parseInt(systemSplit[0]),
+        Integer.parseInt(systemSplit[1]),
+        Integer.parseInt(systemSplit[2]));
+    bookingCal.set(
+        Integer.parseInt(bookingSplit[0]),
+        Integer.parseInt(bookingSplit[1]),
+        Integer.parseInt(bookingSplit[2]));
+
+    // Compare the two dates
+    if (bookingCal.before(systemCal)) {
+      MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(bookCheckIn, systemDate);
+      return;
+    }
 
     // Obtain booking's venue details
     String venueCode = "";
     String venueName = "";
     int venueCapacity = 0;
-    for (int i = 0; i < numOfVenues; i++) {
-      if (bookingCode.equals(venueCodes.get(i))) {
-        venueCode = bookingCode;
-        venueName = venueNames.get(i);
-        venueCapacity = Integer.parseInt(capacities.get(i));
+    int venueIndex;
+    for (venueIndex = 0; venueIndex < numOfVenues; venueIndex++) {
+      if (bookCode.equals(venues.get(venueIndex).getCode())) {
+
+        // Check if the venue is already booked
+        if (venues.get(venueIndex).isDateBooked(bookCheckIn)) {
+          MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(
+              venues.get(venueIndex).getName(), bookCheckIn);
+          return;
+        }
+
+        // else, set the venue details
+        venueCode = bookCode;
+        venueName = venues.get(venueIndex).getName();
+        venueCapacity = Integer.parseInt(venues.get(venueIndex).getCapacity());
         break;
       }
     }
 
-    // Checks if making a booking is possible
-    if (systemDate.isEmpty()) {
-      MessageCli.BOOKING_NOT_MADE_DATE_NOT_SET.printMessage();
-      return;
-    }
-    if (numOfVenues == 0) {
-      MessageCli.BOOKING_NOT_MADE_NO_VENUES.printMessage();
-      return;
-    }
+    // Check if the venue code is not found
     if (venueCode.isEmpty()) {
       MessageCli.BOOKING_NOT_MADE_VENUE_NOT_FOUND.printMessage();
     }
-    for (int j = 0; j < numOfBookings; j++) {
-      if (venueCode.equals(bookingCodes.get(j)) && bookingDate.equals(bookingDates.get(j))) {
-        MessageCli.BOOKING_NOT_MADE_VENUE_ALREADY_BOOKED.printMessage(venueName, bookingDate);
-        return;
-      }
-    }
-    Calendar systemDateCal = new GregorianCalendar();
-    Calendar bookingDateCal = new GregorianCalendar();
-    String[] currentDateSplit = systemDate.split("/");
-    systemDateCal.set(
-        Integer.parseInt(currentDateSplit[2]),
-        Integer.parseInt(currentDateSplit[1]),
-        Integer.parseInt(currentDateSplit[0]));
-    String[] bookingDateSplit = bookingDate.split("/");
-    bookingDateCal.set(
-        Integer.parseInt(bookingDateSplit[2]),
-        Integer.parseInt(bookingDateSplit[1]),
-        Integer.parseInt(bookingDateSplit[0]));
-    if (bookingDateCal.before(systemDateCal)) {
-      MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(bookingDate, systemDate);
-      return;
-    }
 
     // Adjust booking attendee number if attendee is too large or too small
-    int bookingToBeOccupied = Integer.parseInt(bookingAttendee);
-    if (venueCapacity < bookingToBeOccupied) {
+    // Check if the number of attendees is too large
+    int attendeeInt = Integer.parseInt(bookAttendee);
+    if (venueCapacity < attendeeInt) {
       MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(
           options[3], Integer.toString(venueCapacity), Integer.toString(venueCapacity));
-      bookingToBeOccupied = venueCapacity;
+      attendeeInt = venueCapacity;
     }
+
+    // Check if the number of attendees is too small
     int oneForth = (int) (venueCapacity * 0.25);
-    if (oneForth > bookingToBeOccupied) {
+    if (oneForth > attendeeInt) {
       MessageCli.BOOKING_ATTENDEES_ADJUSTED.printMessage(
           options[3], Integer.toString(oneForth), Integer.toString(venueCapacity));
-      bookingToBeOccupied = oneForth;
+      attendeeInt = oneForth;
     }
-    bookingAttendee = Integer.toString(bookingToBeOccupied);
+    bookAttendee = Integer.toString(attendeeInt);
 
     // Make and confirm booking to user
     String bookingRef = BookingReferenceGenerator.generateBookingReference();
-    bookingRefs.add(bookingRef);
-    bookingCodes.add(bookingCode);
-    bookingDates.add(bookingDate);
-    bookingEmails.add(bookingEmail);
-    bookingAttendees.add(bookingAttendee);
-    bookingMades.add(systemDate);
-    bookingNames.add(venueName);
+    Booking booking =
+        new Booking(bookingRef, bookCheckIn, bookEmail, venueCode, bookAttendee, systemDate);
+    bookings.add(booking);
+    venues.get(venueIndex).addBooking(booking);
     numOfBookings++;
     MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(
-        bookingRef, venueName, bookingDate, bookingAttendee);
+        bookingRef, venueName, bookCheckIn, bookAttendee);
   }
 
   public void printBookings(String venueCode) {
