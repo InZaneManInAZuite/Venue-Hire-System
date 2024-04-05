@@ -45,6 +45,10 @@ public class Venue {
     return this.earliest;
   }
 
+  public int getNumOfVenueBookings() {
+    return this.numOfVenueBookings;
+  }
+
   public void setEmptyEarliest(String earliest) {
     if (this.earliest == null) {
       this.earliest = earliest;
@@ -66,11 +70,13 @@ public class Venue {
     bookings.add(booking);
     numOfVenueBookings++;
 
-    if (this.earliest == booking.checkIn) {
+    if (this.earliest.equals(booking.checkIn)) {
+      incrementEarliest();
       while (isDateBooked(this.earliest)) {
         incrementEarliest();
       }
     }
+
     return;
   }
 
@@ -88,20 +94,23 @@ public class Venue {
     // Increment the date by 1 day
     date.add(Calendar.DAY_OF_MONTH, 1);
 
-    // Convert the date back to a string
-    this.earliest =
-        date.get(Calendar.DAY_OF_MONTH)
-            + "/"
-            + date.get(Calendar.MONTH)
-            + "/"
-            + date.get(Calendar.YEAR);
-
-    // Add a 0 to the day if it is less than 10
-    if (date.get(Calendar.DAY_OF_MONTH) < 10) {
-      this.earliest = "0" + this.earliest;
+    // Convert the month back to a string
+    String month = Integer.toString(date.get(Calendar.MONTH));
+    if (date.get(Calendar.MONTH) < 10) {
+      month = "0" + month;
     }
+
+    // Convert the day back to a string
+    String day = Integer.toString(date.get(Calendar.DAY_OF_MONTH));
+    if (date.get(Calendar.DAY_OF_MONTH) < 10) {
+      day = "0" + day;
+    }
+
+    // Convert the date back to a string
+    this.earliest = day + "/" + month + "/" + date.get(Calendar.YEAR);
   }
 
+  // Update the earliest available date of the venue
   public void updateEarliest(String newSystemDate) {
 
     this.earliest = newSystemDate;
@@ -109,5 +118,10 @@ public class Venue {
       incrementEarliest();
     }
     return;
+  }
+
+  public Booking getBooking(int index) {
+
+    return bookings.get(index);
   }
 }

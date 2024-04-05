@@ -185,17 +185,32 @@ public class VenueHireSystem {
       systemWasSet = true;
     }
 
+    // Split the date into day, month and year
+    String[] dateSplit = dateInput.split("/");
+
+    // Format day and month if they are less than 10
+    String day = dateSplit[0];
+    if (Integer.parseInt(dateSplit[0]) < 10) {
+      day = "0" + Integer.parseInt(dateSplit[0]);
+    }
+
+    // Format month if it is less than 10
+    String month = dateSplit[1];
+    if (Integer.parseInt(dateSplit[1]) < 10) {
+      month = "0" + Integer.parseInt(dateSplit[1]);
+    }
+
     // Set the system date
-    systemDate = dateInput;
+    systemDate = day + "/" + month + "/" + dateSplit[2];
 
     // Update the earliest available date for all venues
     if (systemWasSet) {
       for (int i = 0; i < numOfVenues; i++) {
-        venues.get(i).updateEarliest(dateInput);
+        venues.get(i).updateEarliest(systemDate);
       }
     } else {
       for (int i = 0; i < numOfVenues; i++) {
-        venues.get(i).setEmptyEarliest(dateInput);
+        venues.get(i).setEmptyEarliest(systemDate);
       }
     }
 
@@ -242,19 +257,34 @@ public class VenueHireSystem {
     Calendar systemCal = new GregorianCalendar();
     Calendar bookingCal = new GregorianCalendar();
     systemCal.set(
-        Integer.parseInt(systemSplit[0]),
+        Integer.parseInt(systemSplit[2]),
         Integer.parseInt(systemSplit[1]),
-        Integer.parseInt(systemSplit[2]));
+        Integer.parseInt(systemSplit[0]));
     bookingCal.set(
-        Integer.parseInt(bookingSplit[0]),
+        Integer.parseInt(bookingSplit[2]),
         Integer.parseInt(bookingSplit[1]),
-        Integer.parseInt(bookingSplit[2]));
+        Integer.parseInt(bookingSplit[0]));
 
     // Compare the two dates
     if (bookingCal.before(systemCal)) {
       MessageCli.BOOKING_NOT_MADE_PAST_DATE.printMessage(bookCheckIn, systemDate);
       return;
     }
+
+    // Adjust the booking date format if it is less than 10
+    String day = bookingSplit[0];
+    if (Integer.parseInt(bookingSplit[0]) < 10) {
+      day = "0" + Integer.parseInt(bookingSplit[0]);
+    }
+
+    // Adjust the booking month format if it is less than 10
+    String month = bookingSplit[1];
+    if (Integer.parseInt(bookingSplit[1]) < 10) {
+      month = "0" + Integer.parseInt(bookingSplit[1]);
+    }
+
+    // Set the booking date
+    bookCheckIn = day + "/" + month + "/" + bookingSplit[2];
 
     // Obtain booking's venue details
     String venueCode = "";
@@ -316,12 +346,13 @@ public class VenueHireSystem {
   public void printBookings(String venueCode) {
     // TODO implement this method
 
-    // Find the venue name
+    // Check if the venue exits
     boolean venueFound = false;
     String venueName = "";
-    for (int i = 0; i < numOfVenues; i++) {
-      if (venueCode.equals(venueCodes.get(i))) {
-        venueName = venueNames.get(i);
+    int venueIndex = 0;
+    for (venueIndex = 0; venueIndex < numOfVenues; venueIndex++) {
+      if (venueCode.equals(venues.get(venueIndex).getCode())) {
+        venueName = venues.get(venueIndex).getName();
         MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueName);
         venueFound = true;
       }
@@ -331,27 +362,17 @@ public class VenueHireSystem {
       return;
     }
 
-    // Check which booking references and dates the venue is booked for
-    ArrayList<String> venueDates = new ArrayList<String>();
-    ArrayList<String> venueRefs = new ArrayList<String>();
-    int venueUsed = 0;
-    for (int j = 0; j < numOfBookings; j++) {
-      if (venueCode.equals(bookingCodes.get(j))) {
-        venueDates.add(bookingDates.get(j));
-        venueRefs.add(bookingRefs.get(j));
-        venueUsed++;
-      }
-    }
-
     // If the venue is not booked, print message
-    if (venueUsed == 0) {
+    if (venues.get(venueIndex).getNumOfVenueBookings() == 0) {
       MessageCli.PRINT_BOOKINGS_NONE.printMessage(venueName);
       return;
     }
 
     // Print all the bookings for the venue
-    for (int k = 0; k < venueUsed; k++) {
-      MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(venueRefs.get(k), venueDates.get(k));
+    for (int i = 0; i < venues.get(venueIndex).getNumOfVenueBookings(); i++) {
+      String refs = venues.get(venueIndex).getBooking(i).ref;
+      String checkIn = venues.get(venueIndex).getBooking(i).checkIn;
+      MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(refs, checkIn);
     }
   }
 
