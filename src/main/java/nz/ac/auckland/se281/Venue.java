@@ -46,10 +46,15 @@ public class Venue {
     return this.earliest;
   }
 
+  public Booking getBooking(int index) {
+    return bookings.get(index);
+  }
+
   public int getNumOfVenueBookings() {
     return this.numOfVenueBookings;
   }
 
+  // Set the earliest available date of the venue if it is empty
   public void setEmptyEarliest(String earliest) {
     if (this.earliest == null) {
       this.earliest = earliest;
@@ -68,9 +73,12 @@ public class Venue {
 
   // Add a booking to the venue
   public void addBooking(Booking booking) {
+
+    // Add the booking to the list of bookings
     bookings.add(booking);
     numOfVenueBookings++;
 
+    // Update the earliest available date of the venue
     if (this.earliest.equals(booking.getCheckIn())) {
       incrementEarliest();
       while (isDateBooked(this.earliest)) {
@@ -119,10 +127,5 @@ public class Venue {
       incrementEarliest();
     }
     return;
-  }
-
-  public Booking getBooking(int index) {
-
-    return bookings.get(index);
   }
 }

@@ -445,7 +445,7 @@ public class VenueHireSystem {
 
     // Add floral service to booking
     String type = floralType.getName();
-    Floral floral = new Floral(type);
+    Flowers floral = new Flowers(type);
     floral.setCost();
     venues.get(venueIndex).getBooking(bookIndex).addService(floral);
     MessageCli.ADD_SERVICE_SUCCESSFUL.printMessage(
@@ -493,16 +493,11 @@ public class VenueHireSystem {
     int sum = Integer.parseInt(hireCost);
 
     // Get the cost of all services to be paid
-    for (int i = 0; i < venues.get(venueIndex).getBooking(bookIndex).numOfServices; i++) {
+    for (int i = 0; i < venues.get(venueIndex).getBooking(bookIndex).getNumOfServices(); i++) {
+      String serve = venues.get(venueIndex).getBooking(bookIndex).getServices().get(i).serve;
 
       // Check if the service is catering, music or floral
-      if (venues
-          .get(venueIndex)
-          .getBooking(bookIndex)
-          .getServices()
-          .get(i)
-          .serve
-          .equals("Catering")) {
+      if (serve.equals("Catering")) {
         Catering catering =
             (Catering) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(
@@ -511,13 +506,7 @@ public class VenueHireSystem {
       }
 
       // Check if the service is music
-      else if (venues
-          .get(venueIndex)
-          .getBooking(bookIndex)
-          .getServices()
-          .get(i)
-          .serve
-          .equals("Music")) {
+      else if (serve.equals("Music")) {
         Music music = (Music) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(Integer.toString(music.getCost()));
         sum += music.getCost();
@@ -525,7 +514,8 @@ public class VenueHireSystem {
 
       // Check if the service is floral
       else {
-        Floral floral = (Floral) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
+        Flowers floral =
+            (Flowers) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(
             floral.getType(), Integer.toString(floral.getCost()));
         sum += floral.getCost();

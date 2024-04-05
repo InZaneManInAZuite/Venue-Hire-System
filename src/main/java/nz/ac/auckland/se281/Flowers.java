@@ -1,12 +1,12 @@
 package nz.ac.auckland.se281;
 
-public class Floral extends Service {
+public class Flowers extends Service {
 
   // Find important details of each instance of a floral service
   private String type;
 
   // Constructors for the floral service
-  public Floral(String type) {
+  public Flowers(String type) {
     this.serve = "Floral";
     this.type = type;
   }

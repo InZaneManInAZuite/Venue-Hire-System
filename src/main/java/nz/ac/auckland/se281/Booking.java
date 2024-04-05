@@ -13,7 +13,7 @@ public class Booking {
   private String email;
   private String attendee;
   private ArrayList<Service> services = new ArrayList<Service>();
-  int numOfServices = 0;
+  private int numOfServices = 0;
 
   // Constructors for the booking
   public Booking() {}
@@ -64,6 +64,10 @@ public class Booking {
 
   public ArrayList<Service> getServices() {
     return this.services;
+  }
+
+  public int getNumOfServices() {
+    return this.numOfServices;
   }
 
   // Add a service to the booking
