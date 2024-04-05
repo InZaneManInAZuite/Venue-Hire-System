@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Venue {
+
   // Find important details of each instance of a venue
   private String name;
   private String code;
@@ -58,7 +59,7 @@ public class Venue {
   // Check if the date is already booked
   public boolean isDateBooked(String date) {
     for (int i = 0; i < numOfVenueBookings; i++) {
-      if (date.equals(bookings.get(i).checkIn)) {
+      if (date.equals(bookings.get(i).getCheckIn())) {
         return true;
       }
     }
@@ -70,7 +71,7 @@ public class Venue {
     bookings.add(booking);
     numOfVenueBookings++;
 
-    if (this.earliest.equals(booking.checkIn)) {
+    if (this.earliest.equals(booking.getCheckIn())) {
       incrementEarliest();
       while (isDateBooked(this.earliest)) {
         incrementEarliest();

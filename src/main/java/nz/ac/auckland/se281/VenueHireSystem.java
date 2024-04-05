@@ -8,33 +8,9 @@ import nz.ac.auckland.se281.Types.FloralType;
 
 public class VenueHireSystem {
 
-  // Store all available venue information
+  // Store all important details of the venue hire system
   private ArrayList<Venue> venues = new ArrayList<Venue>();
-  private ArrayList<String> venueNames = new ArrayList<String>();
-  private ArrayList<String> venueCodes = new ArrayList<String>();
-  private ArrayList<String> capacities = new ArrayList<String>();
-  private ArrayList<String> hireFees = new ArrayList<String>();
   private int numOfVenues = 0;
-
-  // Store all booking information
-  private ArrayList<Booking> bookings = new ArrayList<Booking>();
-  private ArrayList<String> bookingRefs = new ArrayList<String>();
-  private ArrayList<String> bookingCodes = new ArrayList<String>();
-  private ArrayList<String> bookingDates = new ArrayList<String>();
-  private ArrayList<String> bookingEmails = new ArrayList<String>();
-  private ArrayList<String> bookingAttendees = new ArrayList<String>();
-  private ArrayList<String> bookingMades = new ArrayList<String>();
-  private ArrayList<String> bookingNames = new ArrayList<String>();
-  private int numOfBookings = 0;
-
-  // Store all service information
-  private ArrayList<String> serviceRefs = new ArrayList<String>();
-  private ArrayList<String> serviceNames = new ArrayList<String>();
-  private ArrayList<Integer> serviceCosts = new ArrayList<Integer>();
-  private ArrayList<String> serviceTypes = new ArrayList<String>();
-  private int numOfServices = 0;
-
-  // Store all important system information
   private String systemDate = "";
 
   public VenueHireSystem() {}
@@ -336,9 +312,7 @@ public class VenueHireSystem {
     String bookingRef = BookingReferenceGenerator.generateBookingReference();
     Booking booking =
         new Booking(bookingRef, bookCheckIn, bookEmail, venueCode, bookAttendee, systemDate);
-    bookings.add(booking);
     venues.get(venueIndex).addBooking(booking);
-    numOfBookings++;
     MessageCli.MAKE_BOOKING_SUCCESSFUL.printMessage(
         bookingRef, venueName, bookCheckIn, bookAttendee);
   }
@@ -373,8 +347,8 @@ public class VenueHireSystem {
 
     // Print all the bookings for the venue
     for (int i = 0; i < venues.get(venueIndex).getNumOfVenueBookings(); i++) {
-      String refs = venues.get(venueIndex).getBooking(i).ref;
-      String checkIn = venues.get(venueIndex).getBooking(i).checkIn;
+      String refs = venues.get(venueIndex).getBooking(i).getRef();
+      String checkIn = venues.get(venueIndex).getBooking(i).getCheckIn();
       MessageCli.PRINT_BOOKINGS_ENTRY.printMessage(refs, checkIn);
     }
   }
@@ -389,8 +363,8 @@ public class VenueHireSystem {
     int bookIndex = 0;
     for (venueIndex = 0; venueIndex < numOfVenues; venueIndex++) {
       for (bookIndex = 0; bookIndex < venues.get(venueIndex).getNumOfVenueBookings(); bookIndex++) {
-        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).ref)) {
-          bookAttendee = venues.get(venueIndex).getBooking(bookIndex).attendee;
+        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).getRef())) {
+          bookAttendee = venues.get(venueIndex).getBooking(bookIndex).getAttendee();
           bookExists = true;
           break;
         }
@@ -423,7 +397,7 @@ public class VenueHireSystem {
     int bookIndex = 0;
     for (venueIndex = 0; venueIndex < numOfVenues; venueIndex++) {
       for (bookIndex = 0; bookIndex < venues.get(venueIndex).getNumOfVenueBookings(); bookIndex++) {
-        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).ref)) {
+        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).getRef())) {
           bookExists = true;
           break;
         }
@@ -453,7 +427,7 @@ public class VenueHireSystem {
     int bookIndex = 0;
     for (venueIndex = 0; venueIndex < numOfVenues; venueIndex++) {
       for (bookIndex = 0; bookIndex < venues.get(venueIndex).getNumOfVenueBookings(); bookIndex++) {
-        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).ref)) {
+        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).getRef())) {
           bookingExists = true;
           break;
         }
@@ -487,7 +461,7 @@ public class VenueHireSystem {
     int bookIndex = 0;
     for (venueIndex = 0; venueIndex < numOfVenues; venueIndex++) {
       for (bookIndex = 0; bookIndex < venues.get(venueIndex).getNumOfVenueBookings(); bookIndex++) {
-        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).ref)) {
+        if (bookingReference.equals(venues.get(venueIndex).getBooking(bookIndex).getRef())) {
           bookExists = true;
           break;
         }
@@ -506,10 +480,10 @@ public class VenueHireSystem {
     // Print first half of the invoice
     MessageCli.INVOICE_CONTENT_TOP_HALF.printMessage(
         bookingReference,
-        venues.get(venueIndex).getBooking(bookIndex).email,
-        venues.get(venueIndex).getBooking(bookIndex).bookDate,
-        venues.get(venueIndex).getBooking(bookIndex).checkIn,
-        venues.get(venueIndex).getBooking(bookIndex).attendee,
+        venues.get(venueIndex).getBooking(bookIndex).getEmail(),
+        venues.get(venueIndex).getBooking(bookIndex).getBookDate(),
+        venues.get(venueIndex).getBooking(bookIndex).getCheckIn(),
+        venues.get(venueIndex).getBooking(bookIndex).getAttendee(),
         venues.get(venueIndex).getName());
 
     // Obtain details for the middle body of the invoice
@@ -522,23 +496,36 @@ public class VenueHireSystem {
     for (int i = 0; i < venues.get(venueIndex).getBooking(bookIndex).numOfServices; i++) {
 
       // Check if the service is catering, music or floral
-      if (venues.get(venueIndex).getBooking(bookIndex).services.get(i).serve.equals("Catering")) {
-        Catering catering = (Catering) venues.get(venueIndex).getBooking(bookIndex).services.get(i);
+      if (venues
+          .get(venueIndex)
+          .getBooking(bookIndex)
+          .getServices()
+          .get(i)
+          .serve
+          .equals("Catering")) {
+        Catering catering =
+            (Catering) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(
             catering.getType(), Integer.toString(catering.cost));
         sum += catering.cost;
       }
 
       // Check if the service is music
-      else if (venues.get(venueIndex).getBooking(bookIndex).services.get(i).serve.equals("Music")) {
-        Music music = (Music) venues.get(venueIndex).getBooking(bookIndex).services.get(i);
+      else if (venues
+          .get(venueIndex)
+          .getBooking(bookIndex)
+          .getServices()
+          .get(i)
+          .serve
+          .equals("Music")) {
+        Music music = (Music) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(Integer.toString(music.getCost()));
         sum += music.getCost();
       }
 
       // Check if the service is floral
       else {
-        Floral floral = (Floral) venues.get(venueIndex).getBooking(bookIndex).services.get(i);
+        Floral floral = (Floral) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(
             floral.getType(), Integer.toString(floral.getCost()));
         sum += floral.getCost();
