@@ -355,8 +355,11 @@ public class VenueHireSystem {
         venueName = venues.get(venueIndex).getName();
         MessageCli.PRINT_BOOKINGS_HEADER.printMessage(venueName);
         venueFound = true;
+        break;
       }
     }
+
+    // If the venue is not found, print message
     if (venueFound == false) {
       MessageCli.PRINT_BOOKINGS_VENUE_NOT_FOUND.printMessage(venueCode);
       return;
