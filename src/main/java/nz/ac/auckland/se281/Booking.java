@@ -1,8 +1,6 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 public class Booking {
   public String ref;
@@ -15,8 +13,8 @@ public class Booking {
   public ArrayList<Catering> caters = new ArrayList<Catering>();
   public ArrayList<Music> musics = new ArrayList<Music>();
   public ArrayList<Floral> florals = new ArrayList<Floral>();
+  public ArrayList<Service> services = new ArrayList<Service>();
   public int numOfCaters = 0, numOfMusics = 0, numOfFlorals = 0;
-
 
   public Booking() {}
 
@@ -26,6 +24,10 @@ public class Booking {
     this.email = email;
     this.venueCode = venueCode;
     this.attendee = attendee;
+  }
+
+  public void add(Service service) {
+    this.services.add(service);
   }
 
   public void add(Catering cater) {
