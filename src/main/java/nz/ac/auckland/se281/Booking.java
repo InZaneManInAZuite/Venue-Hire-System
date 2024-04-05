@@ -14,7 +14,7 @@ public class Booking {
   public ArrayList<Music> musics = new ArrayList<Music>();
   public ArrayList<Floral> florals = new ArrayList<Floral>();
   public ArrayList<Service> services = new ArrayList<Service>();
-  public int numOfCaters = 0, numOfMusics = 0, numOfFlorals = 0;
+  int numOfServices = 0;
 
   public Booking() {}
 
@@ -33,22 +33,8 @@ public class Booking {
     this.bookDate = bookDate;
   }
 
-  public void add(Service service) {
+  public void addService(Service service) {
     this.services.add(service);
-  }
-
-  public void add(Catering cater) {
-    this.caters.add(cater);
-    numOfCaters++;
-  }
-
-  public void add(Music music) {
-    this.musics.add(music);
-    numOfMusics++;
-  }
-
-  public void add(Floral floral) {
-    this.florals.add(floral);
-    numOfFlorals++;
+    numOfServices++;
   }
 }
