@@ -16,7 +16,6 @@ public class VenueHireSystem {
   public VenueHireSystem() {}
 
   public void printVenues() {
-    // TODO implement this method
 
     // Checks if there are venues
     if (numOfVenues == 0) {
@@ -100,7 +99,6 @@ public class VenueHireSystem {
 
   public void createVenue(
       String venueName, String venueCode, String capacityInput, String hireFeeInput) {
-    // TODO implement this
 
     // Initialize variables
     int capacity;
@@ -153,7 +151,6 @@ public class VenueHireSystem {
   }
 
   public void setSystemDate(String dateInput) {
-    // TODO implement this method
 
     // Check if the system date was not set before
     boolean systemWasSet = false;
@@ -195,7 +192,6 @@ public class VenueHireSystem {
   }
 
   public void printSystemDate() {
-    // TODO implement this method
 
     if (systemDate.isEmpty()) {
       MessageCli.CURRENT_DATE.printMessage("not set");
@@ -206,7 +202,6 @@ public class VenueHireSystem {
   }
 
   public void makeBooking(String[] options) {
-    // TODO implement this method
 
     // Obtain booking details
     String bookCode = options[0];
@@ -318,7 +313,6 @@ public class VenueHireSystem {
   }
 
   public void printBookings(String venueCode) {
-    // TODO implement this method
 
     // Check if the venue exits
     boolean venueFound = false;
@@ -354,7 +348,6 @@ public class VenueHireSystem {
   }
 
   public void addCateringService(String bookingReference, CateringType cateringType) {
-    // TODO implement this method
 
     // Check if booking reference exists
     boolean bookExists = false;
@@ -389,7 +382,6 @@ public class VenueHireSystem {
   }
 
   public void addServiceMusic(String bookingReference) {
-    // TODO implement this method
 
     // Check if booking reference exists
     boolean bookExists = false;
@@ -419,7 +411,6 @@ public class VenueHireSystem {
   }
 
   public void addServiceFloral(String bookingReference, FloralType floralType) {
-    // TODO implement this method
 
     // Check if booking reference exists
     boolean bookingExists = false;
@@ -453,7 +444,6 @@ public class VenueHireSystem {
   }
 
   public void viewInvoice(String bookingReference) {
-    // TODO implement this method
 
     // Check if booking reference exists
     boolean bookExists = false;
@@ -496,24 +486,22 @@ public class VenueHireSystem {
     for (int i = 0; i < venues.get(venueIndex).getBooking(bookIndex).getNumOfServices(); i++) {
       String serve = venues.get(venueIndex).getBooking(bookIndex).getServices().get(i).serve;
 
-      // Check if the service is catering, music or floral
       if (serve.equals("Catering")) {
+
+        // Check if the service is catering, music or floral
         Catering catering =
             (Catering) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_CATERING_ENTRY.printMessage(
             catering.getType(), Integer.toString(catering.cost));
         sum += catering.cost;
-      }
+      } else if (serve.equals("Music")) {
 
-      // Check if the service is music
-      else if (serve.equals("Music")) {
+        // Check if the service is music
         Music music = (Music) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_MUSIC_ENTRY.printMessage(Integer.toString(music.getCost()));
         sum += music.getCost();
-      }
+      } else { // Check if the service is floral
 
-      // Check if the service is floral
-      else {
         Flowers floral =
             (Flowers) venues.get(venueIndex).getBooking(bookIndex).getServices().get(i);
         MessageCli.INVOICE_CONTENT_FLORAL_ENTRY.printMessage(
